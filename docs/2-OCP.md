@@ -71,6 +71,18 @@ La clase LoginModule ha quedado completamente CERRADA. No hace falta modificarla
 
 Esta solución está basada en el **strategy pattern**. También suele encajar muy bien en estos casos el **factory pattern**.
 
+3) Aplicar el patrón *factory*:
+
+```php
+class LoginModule {
+    
+    public function login($user) {
+        $class = get_class($user).'Authenticator';
+        return new $class();
+    }
+}
+```
+
 ### Ejemplo 2
 
 En este caso, tenemos una clase Repository que se conecta a base de datos (podría ser MySQL, por ejemplo). Pero de repente queremos trabajar con una API en vez de con la base de datos.
