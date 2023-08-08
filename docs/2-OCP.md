@@ -44,13 +44,16 @@ interface AuthenticateUserInterface {
 
 class NormalUserAuthenticator implements AuthenticateUserInterface {
     public function authenticate($user) {
-        // ...
+        // . . .
+
+        echo 'Logica del NormalUserAuthenticator';
     }
 }
 
 class GmailUserAuthenticator implements AuthenticateUserInterface {
     public function authenticate($user) {
-        // ...
+        // . . .
+        echo 'Logica del GmailUserAuthenticator';
     }
 }
 ```
@@ -67,6 +70,24 @@ class LoginModule {
 }
 ```
 
+Aplicacion funcional *strategy*:
+
+```php
+
+class LoginModule {
+
+	public function login($user) {
+		$classAauthenticatorName = $user . 'Authenticator';
+		$classAauthenticator = new $classAauthenticatorName();
+		$classAauthenticator->authenticate($user);
+	}
+}
+
+$autenticator = new LoginModule();
+$autenticator->login('GmailUser');
+
+```
+
 La clase LoginModule ha quedado completamente CERRADA. No hace falta modificarla para meter más métodos de autenticación.
 
 Esta solución está basada en el **strategy pattern**. También suele encajar muy bien en estos casos el **factory pattern**.
@@ -81,6 +102,24 @@ class LoginModule {
         return new $class();
     }
 }
+```
+
+Aplicacion funcional *factory*:
+
+```php
+class LoginModule{
+	
+	public function create($autenticatorType){
+		
+		$classAauthenticatorName = $autenticatorType . 'Authenticator';
+		
+		return  new $classAauthenticatorName();
+	}
+}
+
+
+$autenticator = (new LoginFactory())->create('GmailUser');
+$autenticator->authenticate('Object User');
 ```
 
 ### Ejemplo 2
